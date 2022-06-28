@@ -25,12 +25,15 @@ public class XxlJobScheduler  {
         initI18n();
 
         // admin trigger pool start
+        //1、启动触发器线程池
         JobTriggerPoolHelper.toStart();
 
         // admin registry monitor run
+        //2、启动注册监视器（将注册到register表中的IP加载到group表）/ 30s执行一次
         JobRegistryHelper.getInstance().start();
 
         // admin fail-monitor run
+        //3、启动失败日志监控器（失败重试，失败邮件发送）
         JobFailMonitorHelper.getInstance().start();
 
         // admin lose-monitor run ( depend on JobTriggerPoolHelper )
@@ -40,6 +43,7 @@ public class XxlJobScheduler  {
         JobLogReportHelper.getInstance().start();
 
         // start-schedule  ( depend on JobTriggerPoolHelper )
+        //6、启动定时任务调度器（执行任务，缓存任务）
         JobScheduleHelper.getInstance().start();
 
         logger.info(">>>>>>>>> init xxl-job admin success.");

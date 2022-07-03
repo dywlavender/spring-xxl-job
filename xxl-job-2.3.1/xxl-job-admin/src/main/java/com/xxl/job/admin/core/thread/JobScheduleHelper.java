@@ -33,6 +33,7 @@ public class JobScheduleHelper {
     private Thread ringThread;
     private volatile boolean scheduleThreadToStop = false;
     private volatile boolean ringThreadToStop = false;
+    //时间轮：key 0-60，value jobId列表，两个线程同时处理这个对象。
     private volatile static Map<Integer, List<Integer>> ringData = new ConcurrentHashMap<>();
 
     public void start(){
@@ -43,7 +44,7 @@ public class JobScheduleHelper {
             public void run() {
 
                 try {
-                    TimeUnit.MILLISECONDS.sleep(5000 - System.currentTimeMillis()%1000 );
+                    TimeUnit.MILLISECONDS.sleep(5000 - System.currentTimeMillis()%1000 ); //休息5s
                 } catch (InterruptedException e) {
                     if (!scheduleThreadToStop) {
                         logger.error(e.getMessage(), e);
@@ -51,7 +52,7 @@ public class JobScheduleHelper {
                 }
                 logger.info(">>>>>>>>> init xxl-job admin scheduler success.");
 
-                // pre-read count: treadpool-size * trigger-qps (each trigger cost 50ms, qps = 1000/50 = 20)
+                // pre-read count: treadpool-size * trigger-qps (each trigger cost 50ms, qps = 1000/50 = 20)   (200+100) * 20 = 6000
                 int preReadCount = (XxlJobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + XxlJobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
 
                 while (!scheduleThreadToStop) {

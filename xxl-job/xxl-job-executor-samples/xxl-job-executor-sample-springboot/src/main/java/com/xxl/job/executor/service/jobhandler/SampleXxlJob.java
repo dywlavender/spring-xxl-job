@@ -51,6 +51,18 @@ public class SampleXxlJob {
     public ReturnT<String> myJobHandler(String params) throws Exception{
         XxlJobHelper.log("my JobHandler.");
         System.out.println(params);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName() + "  wait....");
+                try {
+                    Thread.sleep(500000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        thread.start();
         return null;
     }
 

@@ -124,7 +124,7 @@ public class JobTriggerPoolHelper {
 
 
     // ---------------------- helper ----------------------
-
+    //static的优点：不同任务只需创建一个helper，减少内存消耗
     private static JobTriggerPoolHelper helper = new JobTriggerPoolHelper();
 
     public static void toStart() {

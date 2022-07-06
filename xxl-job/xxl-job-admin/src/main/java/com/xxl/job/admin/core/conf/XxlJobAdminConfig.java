@@ -32,6 +32,8 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
 
     private XxlJobScheduler xxlJobScheduler;
 
+
+    //不理解此处为什么要这么设计？ bean初始化后执行的
     @Override
     public void afterPropertiesSet() throws Exception {
         adminConfig = this;

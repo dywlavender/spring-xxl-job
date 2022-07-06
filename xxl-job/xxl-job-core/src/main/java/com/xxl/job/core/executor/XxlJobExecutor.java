@@ -69,7 +69,7 @@ public class XxlJobExecutor  {
 
         // init logpath
         XxlJobFileAppender.initLogPath(logPath);
-
+        //启动注册的方法
         // init invoker, admin-client
         initAdminBizList(adminAddresses, accessToken);
 

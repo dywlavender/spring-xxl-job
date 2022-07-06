@@ -1,6 +1,10 @@
 package com.xxl.job.admin.core.trigger;
 
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
+import com.xxl.job.admin.core.route.ExecutorRouteStrategyEnum;
+import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.biz.model.TriggerParam;
+import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,9 +65,66 @@ public class XxlJobTrigger {
         }
     }
 
-    private static void processTrigger(XxlJobGroup group,XxlJobInfo jobInfo,int finalFailRetryCount,TriggerTypeEnum triggerType,int index,int tatal){
+    private static void processTrigger(XxlJobGroup group,XxlJobInfo jobInfo,int finalFailRetryCount,TriggerTypeEnum triggerType,int index,int total){
         //param
+        ExecutorBlockStrategyEnum  blockStrategy = ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(),ExecutorBlockStrategyEnum.SERIAL_EXECUTOR);
+        ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(),null);
+        String shardingEnum = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST==executorRouteStrategyEnum)?String.valueOf(index).concat("/").concat(String.valueOf(total)):null;
+
+        //1、save log-id
+        XxlJobLog jobLog = new XxlJobLog();
+
+        //2、init trigger param
+        TriggerParam triggerParam = new TriggerParam();
+
+        //3、init address
+        String address = null;
+        ReturnT<String> routeAddressResult = null;
+        if (group.getRegistryList() != null && !group.getRegistryList().isEmpty()){
+            if(ExecutroRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum){
+                if(index < group.getRegistryList().size()){
+                    address = group.getRegistryList().get(index);
+                }else {
+                    address = group.getRegistryList().get(0);
+                }
+            }else {
+
+            }
+        }else{
+
+        }
+
+        //4、trigger remote executor
+        ReturnT<String> triggerResult = null;
+        if (address != null){
+            triggerResult = runExecutor(triggerParam, address);
+        }else {
+            triggerResult = new ReturnT<String>(ReturnT.FAIL_CODE,null);
+        }
+
+        //5、collection trigger info
+        StringBuffer triggerMsgSb = new StringBuffer();
+
+        //6、save log trigger-info
 
     }
 
+
+    public static ReturnT<String> runExecutor(TriggerParam triggerParam,String address){
+        ReturnT<String> runResult = null;
+        try{
+            ExecutorBiz executorBiz = XxlJobSheduler.getExecutorBiz(address);
+            runResult = executorBiz.run(triggerParam);
+        }catch (Exception e){
+            runResult = new ReturnT<String>(ReturnT.FAIL_CODE,null);
+        }
+
+        StringBuffer runResultSB = new StringBuffer(I18nUtil.getString("jobconf_trigger_run")+":");
+        runResultSB.append("<br>address: ").append(address);
+        runResultSB.append("<br>code: ").append(runResult.getCode());
+        runResultSB.append("<br>msg: ").append(runResult.getMsg());
+
+        runResult.setMsg(runResultSB.toString());
+        return runResult;
+    }
 }

@@ -60,9 +60,23 @@ public class SampleXxlJob {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                System.out.println(Thread.currentThread().getName() + "end");
             }
         });
         thread.start();
+        System.out.println(Thread.currentThread().getName() + "  wait....");
+        for (int i = 0; i < 5; i++) {
+            System.out.println(i);
+            throw new RuntimeException("123");
+        }
+
+        // try {
+        //
+        //     Thread.sleep(500000);
+        // } catch (InterruptedException e) {
+        //     throw new RuntimeException(e);
+        // }
+        // System.out.println(Thread.currentThread().getName() + "end");
         return null;
     }
 

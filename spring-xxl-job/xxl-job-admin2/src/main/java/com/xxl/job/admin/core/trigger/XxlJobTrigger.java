@@ -43,17 +43,18 @@ public class XxlJobTrigger {
         //路由参数
         if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(),null)
                 && group.getRegistryList() != null && !group.getRegistryList().isEmpty()
-                && shardingParam==null){
+                && shardingParam==null) {
             for (int i = 0; i < group.getRegistryList().szie; i++) {
-                processTrigger(group,jobInfo,finalFailRetryCount,triggerType,i,group.getRegistryList().szie());
-            }else{
+                processTrigger(group, jobInfo, finalFailRetryCount, triggerType, i, group.getRegistryList().szie());
+            }
+        }else{
                 if (shardingParam == null){
-                    shardingPAram == new int[]{0,1};
+                    shardingPAram = new int[]{0,1};
                 }
                 processTrigger(group,jobInfo,failRetryCount,triggerType,shardingParam[0],shardingParam[1]);
             }
 
-        }
+
 
     }
     private static boolean isNumeric(String str){

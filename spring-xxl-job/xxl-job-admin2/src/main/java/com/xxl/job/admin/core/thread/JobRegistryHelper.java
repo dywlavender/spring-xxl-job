@@ -139,4 +139,8 @@ public class JobRegistryHelper {
         });
         return ReturnT.SUCCESS;
     }
+
+    private void freshGroupRegistryInfo(RegistryParam registryParam){
+
+    }
 }

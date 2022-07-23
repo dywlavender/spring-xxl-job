@@ -34,6 +34,16 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.exec8</groupId>-->
+<!--			<artifactId>com.xianghy.itextpdf</artifactId>-->
+<!--			<version>1.8</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.3</version>
+		</dependency>
 
 		<!-- freemarker-starter -->
 		<dependency>

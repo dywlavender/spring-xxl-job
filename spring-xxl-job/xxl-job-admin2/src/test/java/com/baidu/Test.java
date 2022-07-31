@@ -1,5 +1,9 @@
 package com.baidu;
 
+import javafx.application.Application;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 import java.util.Scanner;
 
 /**
@@ -10,8 +14,12 @@ import java.util.Scanner;
  * @Version 1.0
  **/
 public class Test {
+    @Autowired
+    private ApplicationContext applicationContext;
     @org.junit.jupiter.api.Test
     public void test() {
+        // Object bean = applicationContext.getBean("");
+
         Scanner s = new Scanner(System.in);
         String str = s.nextLine();
 

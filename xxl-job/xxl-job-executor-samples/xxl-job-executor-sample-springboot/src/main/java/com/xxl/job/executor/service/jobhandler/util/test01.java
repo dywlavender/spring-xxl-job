@@ -1,14 +1,9 @@
 package com.xxl.job.executor.service.jobhandler.util;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.annotations.JsonAdapter;
-import com.itextpdf.text.pdf.PdfReader;
-import sun.nio.cs.UTF_32LE;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,17 +24,19 @@ public class test01 {
         //
         // String str = "{\"a\":\"b\"}";
         // System.out.println("str: "+str);
-        // Object o = JSON.parseObject(str, Map.class);
+        String str = "[{\"a\":\"1\",\"b\":\"2\"},{\"c\":\"3\",\"d\":\"5\"}]";
+        List o = JSON.parseObject(str, List.class);
+        System.out.println(o    );
         // System.out.println(o.toString());
         // String str = "123";
         // byte[] b = str.getBytes("UTF-8");
         // System.out.println(b);
-        String str = " , ";
-        String[] s = str.split(",");
-        for (String ss:s){
-            ss = ss.trim();
 
-            System.out.println(ss.equals(""));
-        }
+        // String[] s = str.split(",");
+        // for (String ss:s){
+        //     ss = ss.trim();
+        //
+        //     System.out.println(ss.equals(""));
+        // }
     }
 }

@@ -10,5 +10,5 @@ public class KMPAlgorithm {
 
     }
 
-    public static int[]
+//    public static int[]
 }

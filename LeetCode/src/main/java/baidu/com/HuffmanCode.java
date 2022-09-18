@@ -1,5 +1,6 @@
 package baidu.com;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -14,6 +15,12 @@ public class HuffmanCode {
         String content = "i like like like java do you like a java";
         byte[] contentByte = content.getBytes();
         System.out.println(contentByte.length);
+        byte[] huffmanCodeBytes = huffmanZip(contentByte);
+        System.out.println(Arrays.toString(huffmanCodeBytes));
+
+    }
+
+    private static byte[] huffmanZip(byte[] contentByte){
         List<Node> nodes = getNodes(contentByte);
         System.out.println(nodes);
 
@@ -23,8 +30,7 @@ public class HuffmanCode {
         Map<Byte, String> codes = getCodes(huffmanTree);
         System.out.println(codes);
         byte[] huffmanCodeBytes = zip(contentByte,codes);
-        System.out.println(Arrays.toString(huffmanCodeBytes));
-
+        return huffmanCodeBytes;
     }
 
     private static byte[] zip(byte[] bytes,Map<Byte,String > huffmanCodes){
@@ -105,6 +111,69 @@ public class HuffmanCode {
             nodes.add(parent);
         }
         return nodes.get(0);
+    }
+
+    private static void unZip(String zipFile,String dstFile){
+        InputStream is = null;
+        ObjectInputStream ois = null;
+        OutputStream os = null;
+        try{
+            is = new FileInputStream(zipFile);
+            ois = new ObjectInputStream(is);
+            byte[] huffmanBytes = (byte[]) ois.readObject();
+            Map<Byte,String> huffmanCodes = (Map<Byte,String>) ois.readObject();
+            byte[] bytes = decode(huffmanCodes,huffmanBytes);
+            os = new FileOutputStream(dstFile);
+            os.write(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                os.close();
+                ois.close();
+                is.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+    }
+
+    private static byte[] decode(Map<Byte, String> huffmanCodes, byte[] huffmanBytes) {
+        return new byte[0];
+    }
+
+    public static void zipFile(String srcFile,String dstFile){
+        OutputStream os = null;
+        ObjectOutputStream oos = null;
+        FileInputStream fis = null;
+        try{
+            fis = new FileInputStream(srcFile);
+            byte[] b = new byte[fis.available()];
+            fis.read(b);
+            byte[] huffmanBytes = huffmanZip(b);
+            os = new FileOutputStream(dstFile);
+            oos = new ObjectOutputStream(os);
+            oos.writeObject(huffmanBytes);
+            oos.writeObject(huffmanCodes);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private static String byteToBitSString(boolean flag, byte b){
+        int temp = b;
+        if (flag){
+            temp |= 256;
+        }
+        String str = Integer.toBinaryString(temp);
+        if (flag){
+            return str.substring(str.length()-8);
+        }else {
+            return str;
+        }
     }
 }
 

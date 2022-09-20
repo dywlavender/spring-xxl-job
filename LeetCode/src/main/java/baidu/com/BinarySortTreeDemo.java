@@ -9,19 +9,34 @@ package baidu.com;
  **/
 public class BinarySortTreeDemo {
     public static void main(String[] args) {
-        int[] arr = {7,3,10,12,5,1,9};
+        // int[] arr = {7,3,10,12,5,1,9};
+        int[] arr = {1,2,3,4,5,6,7};
         BinarySortTree binarySortTree = new BinarySortTree();
         for (int i = 0; i < arr.length; i++) {
             binarySortTree.add(new Node2(arr[i]));
         }
         binarySortTree.infixOrder();
-        binarySortTree.delNode(10);
+        System.out.println("------------");
+        System.out.println(binarySortTree.getRoot().heigth());
+        System.out.println(binarySortTree.getRoot().leftHeigth());
+        System.out.println(binarySortTree.getRoot().rightHeight());
+        System.out.println("----------");
+        binarySortTree.delNode(5);
         binarySortTree.infixOrder();
+        System.out.println(binarySortTree.getRoot().heigth());
+        System.out.println(binarySortTree.getRoot().leftHeigth());
+        System.out.println(binarySortTree.getRoot().rightHeight());
+        System.out.println("----------");
     }
 }
 
 class BinarySortTree{
     private Node2 root;
+
+    public Node2 getRoot(){
+        return root;
+    }
+
     public void add(Node2 node){
         if (root == null){
             root = node;
@@ -54,9 +69,7 @@ class BinarySortTree{
     }
 
     public void delNode(int value){
-        if (root == null){
-            return;
-        }else {
+        if (root != null){
             Node2 targetNode = search(value);
             if (targetNode == null){
                 return;
@@ -138,6 +151,25 @@ class Node2{
                 this.right.add(node);
             }
         }
+
+        if (rightHeight()-leftHeigth()>1){
+            if (right.leftHeigth()<right.leftHeigth()){
+                right.rightRotate();
+                leftRotate();
+            }else {
+                leftRotate();
+            }
+            return;
+        }
+        if (leftHeigth() - rightHeight() > 1){
+            if (left.rightHeight()>left.leftHeigth()){
+                left.leftRotate();
+                rightRotate();
+            }else {
+                leftRotate();
+            }
+        }
+
     }
 
     public void infixOrder() {
@@ -178,5 +210,35 @@ class Node2{
         }
     }
 
-
+    private void leftRotate(){
+        Node2 newNode = new Node2(value);
+        newNode.left = this.left;
+        newNode.right = this.right.left;
+        this.value = this.right.value;
+        this.left = newNode;
+        this.right = this.right.right;
+    }
+    private void rightRotate(){
+        Node2 newNode = new Node2(value);
+        newNode.left = this.left.right;
+        newNode.right = this.right;
+        this.value = this.left.value;
+        this.right = newNode;
+        this.left = this.left.left;
+    }
+    public int heigth(){
+        return Math.max(this.left==null ? 0 :this.left.heigth(),this.right==null? 0:this.right.heigth())+1;
+    }
+    public int rightHeight(){
+        if (right == null){
+            return 0;
+        }
+        return right.heigth();
+    }
+    public int leftHeigth(){
+        if (left == null){
+            return 0;
+        }
+        return left.heigth();
+    }
 }

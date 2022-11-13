@@ -2,6 +2,7 @@ package baidu.com;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * @ClassName Graph
@@ -57,6 +58,41 @@ public class Graph {
     public void showGraph(){
         for (int[] link:edges){
             System.out.println(Arrays.toString(link));
+        }
+    }
+
+    private void bfs(boolean[] isVisited,int i){
+        int u;
+        int w;
+        LinkedList queue = new LinkedList();
+        System.out.println();
+        isVisited[i] = true;
+        queue.addLast(i);
+        while (!queue.isEmpty()) {
+            u = (Integer) queue.removeFirst();
+            w = getFirstNeighbor(u);
+            while (w != -1) {
+                if (!isVisited[w]){
+                    isVisited[w] = true;
+                    queue.addLast(w);
+                }
+                w = getNextNeighbor(u,w);
+                }
+
+        }
+    }
+
+    private int getNextNeighbor(int u, int w) {
+        return 0;
+    }
+
+    private int getFirstNeighbor(int u) {
+        return 0;
+    }
+
+    public void bfs(){
+        for (int i = 0; i < getNumOfVertex(); i++) {
+//            if ()
         }
     }
 }

@@ -17,7 +17,7 @@ public class AssignCookies {
         Arrays.sort(cookies);
         int childId = 0;
         int cookieId = 0;
-        while(childId<children.length && cookieId<cookies.length){
+        while(childId<children.length && cookieId< cookies.length){
             if (children[childId] <= cookies[cookieId]) childId++;
             cookieId++;
         }
